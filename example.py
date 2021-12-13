@@ -1,20 +1,21 @@
 import base64
 
 from pySeed128 import pySeed128
+from pySeed128.pySeed128 import *
 
 if __name__ == "__main__":
     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sit amet ultrices purus. Integer cursus sit amet diam sagittis porttitor. Praesent viverra, erat at tincidunt ornare, mauris arcu dignissim leo, faucibus dapibus est nisl ac neque. Etiam pulvinar sit amet nunc ac vulputate. Vestibulum accumsan interdum ante ac consectetur. Aliquam ut mattis arcu. Aliquam a arcu vel mauris hendrerit molestie. Phasellus rhoncus volutpat odio, eget mattis nisi maximus et. Suspendisse potenti. Aliquam convallis suscipit risus, eget finibus velit fermentum eu. Suspendisse hendrerit metus magna, id mattis leo interdum id. Donec bibendum arcu eget sem faucibus, non aliquam tortor tempor. Maecenas facilisis mauris a eros aliquet, non euismod mi ullamcorper. Maecenas lobortis sagittis urna sit amet viverra. Cras dignissim, libero at imperdiet elementum, magna nisi facilisis ante, eget sodales odio nibh sit amet sem. Proin nec ultrices nisl. Cras ut vestibulum ex. Nam vel ornare turpis. Sed metus lorem, semper a condimentum a, luctus nec sem."
-    ivString = "1234567890ABCDEF"
-    keyString = "FEDCBA0987654321"
+    text = "Lorem ipsum dolor sit amet"
 
-    iv = str.encode(ivString)
-    key = str.encode(keyString)
+    iv = pySeed128.generate_nonce(16)
+    key = pySeed128.generate_nonce(16)
 
-    seed = pySeed128.Seed128(iv, key)
+    seed = pySeed128.Seed128(key)
 
-    crypto_mode = seed.Modes.CFB
-    padding_mode = seed.PaddingModes.PKCS7
-    additional_data = seed.generate_nonce(16)
+    crypto_mode = Modes.XTS
+    padding_mode = PaddingModes.NULL
+    additional_data = generate_nonce(16)
+    nonce = generate_nonce(16)
 
     print("crypto_mode:", crypto_mode)
     print("padding_mode:", padding_mode)
@@ -28,12 +29,13 @@ if __name__ == "__main__":
     pad_text = seed.padding(padding_mode, byte_text)
     print("\npad_text:\n", type(pad_text), len(pad_text), pad_text)
 
-    seed_encoded_text, tag = seed.encode(crypto_mode, pad_text, additional_data)
+    seed_encoded_text, tag = seed.encode(crypto_mode, pad_text, iv, additional_data, nonce)
     print(
         "\nseed_encoded_text:\n",
         type(seed_encoded_text),
         len(seed_encoded_text),
         seed_encoded_text,
+        tag,
     )
 
     base64_seed_encoded_text = base64.b64encode(seed_encoded_text)
@@ -52,7 +54,7 @@ if __name__ == "__main__":
         base64_decoded_text,
     )
 
-    seed_base64_decoded_text = seed.decode(crypto_mode, base64_decoded_text, tag)
+    seed_base64_decoded_text = seed.decode(crypto_mode, base64_decoded_text, iv, tag, nonce)
     print(
         "\nseed_base64_decoded_text:\n",
         type(seed_base64_decoded_text),
