@@ -1,5 +1,4 @@
-from pySeed128 import pySeed128
-from pySeed128.pySeed128 import *
+from kisaSeed.kisaSeed import *
 
 if __name__ == "__main__":
     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sit amet ultrices purus. Integer " \
@@ -20,8 +19,8 @@ if __name__ == "__main__":
     tweak = None
     nonce = None
 
-    key = pySeed128.generate_nonce(16)
-    seed = pySeed128.KisaSeed(key)
+    key = generate_nonce(16)
+    seed = KisaSeed(key)
 
     crypto_modes = [e for e in Modes]
     padding_modes = [e for e in PaddingModes]
@@ -39,19 +38,19 @@ if __name__ == "__main__":
             print("padding_text:", padding_text)
 
             if crypto_mode in [Modes.CBC, Modes.OFB, Modes.CFB, Modes.CFB8]:
-                iv = pySeed128.generate_nonce(16)
+                iv = generate_nonce(16)
                 encode_text, tag = seed.encode(crypto_mode, padding_text, iv=iv)
             if crypto_mode in [Modes.GCM]:
-                iv = pySeed128.generate_nonce(12)
-                additional_data = pySeed128.generate_nonce(16)
+                iv = generate_nonce(12)
+                additional_data = generate_nonce(16)
                 encode_text, tag = seed.encode(crypto_mode, padding_text, iv=iv, additional_data=additional_data)
             if crypto_mode in [Modes.XTS]:
-                key = pySeed128.generate_nonce(32)
-                seed = pySeed128.KisaSeed(key)
-                tweak = pySeed128.generate_nonce(16)
+                key = generate_nonce(32)
+                seed = KisaSeed(key)
+                tweak = generate_nonce(16)
                 encode_text, tag = seed.encode(crypto_mode, padding_text, tweak=tweak)
             if crypto_mode in [Modes.CTR]:
-                nonce = pySeed128.generate_nonce(16)
+                nonce = generate_nonce(16)
                 encode_text, tag = seed.encode(crypto_mode, padding_text, nonce=nonce)
             if crypto_mode in [Modes.ECB]:
                 encode_text, tag = seed.encode(crypto_mode, padding_text)

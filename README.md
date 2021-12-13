@@ -15,8 +15,9 @@ Based on cryptography
 
 ## Usage
     # on python
-    from pySeed128 import pySeed128
-    pySeed128.Seed128(iv, key)
+    from kisaSeed.kisaSeed import *
+    key = generate_nonce(16)
+    seed = KisaSeed(key)
 
 ## Design Internals
 - CBC

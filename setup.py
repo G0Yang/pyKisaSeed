@@ -8,14 +8,14 @@ install_requires = [
     ]
 
 setuptools.setup(
-    name="seed128",
+    name="kisaSeed",
     version="1.0.0",
     author="ioumelon7, ender35841",
     author_email="ioumelon7@gmail.com, ender35841@gmail.com",
     description="KISA Seed 128 encrypt package",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/G0Yang/pySeed128",
+    url="https://github.com/G0Yang/KisaSeed",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
