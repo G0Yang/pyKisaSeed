@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 #custom
-seed128.egg-info/
+kisaSeed.egg-info/
 .idea/
